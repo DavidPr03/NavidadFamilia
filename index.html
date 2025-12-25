@@ -44,14 +44,6 @@
       margin-bottom: 20px;
     }
 
-    .botones {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-
     button {
       background: red;
       border: none;
@@ -60,7 +52,6 @@
       color: white;
       cursor: pointer;
       font-size: clamp(0.9em, 3vw, 1em);
-      flex: 1;
       min-width: 140px;
       touch-action: manipulation;
       -webkit-user-select: none;
@@ -180,15 +171,13 @@
   <h1>🎄 Feliz Navidad Familia 🎄</h1>
   <p class="mensaje">
     Que esta Navidad esté llena de amor, risas y momentos inolvidables.
+    Gracias por ser lo más importante en mi vida ❤️
   </p>
-  <div class="botones">
-    <button onclick="toggleMusica()">🎶 Música</button>
-    <button id="btnPoema" onclick="irAlPoema()" disabled>📜 Poema</button>
-  </div>
+  <button onclick="irAlPoema()">🎁 Sorpresa</button>
 </header>
 
 <section>
-  <h2>📸 Recuerdos</h2>
+  <h2>📸 Nuestros Recuerdos</h2>
 
   <div class="slider">
     <button class="nav prev" onclick="cambiar(-1)">❮</button>
@@ -196,10 +185,6 @@
     <button class="nav next" onclick="cambiar(1)">❯</button>
   </div>
 </section>
-
-<audio id="musica" loop autoplay muted playsinline>
-  <source src="navidad.mp3" type="audio/mpeg">
-</audio>
 
 <footer>
   Hecho con ❤️ para mi familia | Navidad 2025
@@ -230,8 +215,6 @@
 
   let indice = 0;
   const slide = document.getElementById("slide");
-  const musica = document.getElementById("musica");
-  let intervaloSlide = null;
 
   function cambiar(direccion) {
     indice += direccion;
@@ -244,45 +227,6 @@
       slide.style.opacity = 1;
     }, 300);
   }
-
-  // Sincronizar slides con la duración de la canción
-  musica.addEventListener('loadedmetadata', () => {
-    const duracionCancion = musica.duration;
-    const tiempoFoto = (duracionCancion / fotos.length) * 1000;
-    
-    if (intervaloSlide) clearInterval(intervaloSlide);
-    intervaloSlide = setInterval(() => {
-      cambiar(1);
-    }, tiempoFoto);
-  });
-
-  /* MÚSICA */
-  let reproduciendo = false;
-  
-  window.addEventListener('load', () => {
-    const musica = document.getElementById("musica");
-    musica.muted = false;
-    musica.play().catch(error => {
-      console.log("Autoplay no permitido, esperando interacción del usuario");
-    });
-    reproduciendo = true;
-  });
-
-  function toggleMusica() {
-    const musica = document.getElementById("musica");
-    if (reproduciendo) {
-      musica.pause();
-    } else {
-      musica.play();
-    }
-    reproduciendo = !reproduciendo;
-  }
-
-  // Habilitar botón al terminar la canción
-  musica.addEventListener('ended', () => {
-    const btnPoema = document.getElementById("btnPoema");
-    btnPoema.disabled = false;
-  });
 
   function irAlPoema() {
     window.location.href = "poema.html";
@@ -303,4 +247,3 @@
 
 </body>
 </html>
-
