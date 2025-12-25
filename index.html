@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Feliz Navidad Familia 🎄</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom, #0b3d2e, #145a32);
+      color: white;
+      text-align: center;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 30px 15px;
+    }
+
+    h1 {
+      font-size: clamp(1.8em, 8vw, 3em);
+      animation: glow 2s infinite alternate;
+      margin-bottom: 15px;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 10px red; }
+      to { text-shadow: 0 0 25px gold; }
+    }
+
+    .mensaje {
+      max-width: 90%;
+      margin: auto;
+      font-size: clamp(1em, 4vw, 1.2em);
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    .botones {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background: red;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 20px;
+      color: white;
+      cursor: pointer;
+      font-size: clamp(0.9em, 3vw, 1em);
+      flex: 1;
+      min-width: 140px;
+      touch-action: manipulation;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    button:hover {
+      background: gold;
+      color: black;
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    section {
+      padding: 20px 15px;
+    }
+
+    section h2 {
+      font-size: clamp(1.5em, 6vw, 2em);
+      margin-bottom: 20px;
+    }
+
+    /* SLIDER */
+    .slider {
+      position: relative;
+      max-width: 100%;
+      width: 100%;
+      max-width: 650px;
+      margin: 20px auto;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(0,0,0,0.6);
+      aspect-ratio: 4/3;
+    }
+
+    .slider img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 20px;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    .nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 0, 0, 0.8);
+      border: none;
+      color: white;
+      font-size: clamp(1.5em, 5vw, 2em);
+      padding: 8px 12px;
+      cursor: pointer;
+      border-radius: 50%;
+      user-select: none;
+      z-index: 10;
+      touch-action: manipulation;
+    }
+
+    .prev { left: 10px; }
+    .next { right: 10px; }
+
+    .nav:active {
+      background: gold;
+      color: black;
+    }
+
+    /* NIEVE */
+    .nieve {
+      position: fixed;
+      top: -10px;
+      color: white;
+      animation: caer linear infinite;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    @keyframes caer {
+      to { transform: translateY(110vh); }
+    }
+
+    footer {
+      padding: 20px 15px;
+      font-size: 0.85em;
+      opacity: 0.8;
+      margin-top: 30px;
+    }
+
+    /* Pantalla pequeña */
+    @media (max-width: 480px) {
+      header {
+        padding: 20px 10px;
+      }
+
+      .slider {
+        margin: 15px auto;
+      }
+
+      button {
+        padding: 10px 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>🎄 Feliz Navidad Familia 🎄</h1>
+  <p class="mensaje">
+    Que esta Navidad esté llena de amor, risas y momentos inolvidables.
+    Gracias por ser lo más importante en mi vida ❤️
+  </p>
+  <div class="botones">
+    <button onclick="toggleMusica()">🎶 Música</button>
+    <button id="btnPoema" onclick="irAlPoema()" disabled>📜 Poema</button>
+  </div>
+</header>
+
+<section>
+  <h2>📸 Nuestros Recuerdos</h2>
+
+  <div class="slider">
+    <button class="nav prev" onclick="cambiar(-1)">❮</button>
+    <img id="slide" src="foto1.jpeg" alt="Recuerdos familiares">
+    <button class="nav next" onclick="cambiar(1)">❯</button>
+  </div>
+</section>
+
+<audio id="musica" loop autoplay muted playsinline>
+  <source src="navidad.mp3" type="audio/mpeg">
+</audio>
+
+<footer>
+  Hecho con ❤️ para mi familia | Navidad 2025
+</footer>
+
+<script>
+  /* SLIDER */
+  const fotos = [
+    "foto1.jpeg",
+    "foto2.jpeg",
+    "foto3.jpeg",
+    "foto4.jpeg",
+    "foto5.jpeg",
+    "foto6.jpeg",
+    "foto7.jpeg",
+    "foto8.jpeg",
+    "foto9.jpeg",
+    "foto10.jpeg",
+    "foto11.jpeg",
+    "foto12.jpeg",
+    "foto13.jpeg",
+    "foto14.jpeg",
+    "foto15.jpeg",
+    "foto16.jpeg",
+    "foto17.jpeg",
+    "foto18.jpeg"
+  ];
+
+  let indice = 0;
+  const slide = document.getElementById("slide");
+  const musica = document.getElementById("musica");
+  let intervaloSlide = null;
+
+  function cambiar(direccion) {
+    indice += direccion;
+    if (indice < 0) indice = fotos.length - 1;
+    if (indice >= fotos.length) indice = 0;
+
+    slide.style.opacity = 0;
+    setTimeout(() => {
+      slide.src = fotos[indice];
+      slide.style.opacity = 1;
+    }, 300);
+  }
+
+  // Sincronizar slides con la duración de la canción
+  musica.addEventListener('loadedmetadata', () => {
+    const duracionCancion = musica.duration;
+    const tiempoFoto = (duracionCancion / fotos.length) * 1000;
+    
+    if (intervaloSlide) clearInterval(intervaloSlide);
+    intervaloSlide = setInterval(() => {
+      cambiar(1);
+    }, tiempoFoto);
+  });
+
+  /* MÚSICA */
+  let reproduciendo = false;
+  
+  window.addEventListener('load', () => {
+    const musica = document.getElementById("musica");
+    musica.muted = false;
+    musica.play().catch(error => {
+      console.log("Autoplay no permitido, esperando interacción del usuario");
+    });
+    reproduciendo = true;
+  });
+
+  function toggleMusica() {
+    const musica = document.getElementById("musica");
+    if (reproduciendo) {
+      musica.pause();
+    } else {
+      musica.play();
+    }
+    reproduciendo = !reproduciendo;
+  }
+
+  // Habilitar botón al terminar la canción
+  musica.addEventListener('ended', () => {
+    const btnPoema = document.getElementById("btnPoema");
+    btnPoema.disabled = false;
+  });
+
+  function irAlPoema() {
+    window.location.href = "poema.html";
+  }
+
+  /* NIEVE */
+  setInterval(() => {
+    const snow = document.createElement("div");
+    snow.className = "nieve";
+    snow.style.left = Math.random() * 100 + "vw";
+    snow.style.animationDuration = (Math.random() * 3 + 2) + "s";
+    snow.style.fontSize = (Math.random() * 20 + 10) + "px";
+    snow.innerHTML = "❄";
+    document.body.appendChild(snow);
+    setTimeout(() => snow.remove(), 5000);
+  }, 200);
+</script>
+
+</body>
+</html>
