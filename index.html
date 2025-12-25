@@ -103,28 +103,40 @@
       transition: opacity 0.5s ease-in-out;
     }
 
+    .controles {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      margin-top: 20px;
+      padding: 0 15px;
+    }
+
     .nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(255, 0, 0, 0.8);
+      background: red;
       border: none;
       color: white;
-      font-size: clamp(1.5em, 5vw, 2em);
-      padding: 8px 12px;
+      font-size: clamp(1.2em, 4vw, 1.8em);
+      padding: 10px 15px;
       cursor: pointer;
       border-radius: 50%;
       user-select: none;
-      z-index: 10;
       touch-action: manipulation;
+      -webkit-user-select: none;
     }
 
-    .prev { left: 10px; }
-    .next { right: 10px; }
-
-    .nav:active {
+    .nav:hover {
       background: gold;
       color: black;
+    }
+
+    .nav:active {
+      transform: scale(0.95);
+    }
+
+    .contador {
+      font-size: clamp(1em, 3vw, 1.2em);
+      min-width: 60px;
     }
 
     /* NIEVE */
@@ -180,9 +192,13 @@
   <h2>📸 Nuestros Recuerdos</h2>
 
   <div class="slider">
-    <button class="nav prev" onclick="cambiar(-1)">❮</button>
     <img id="slide" src="foto1.jpeg" alt="Recuerdos familiares">
-    <button class="nav next" onclick="cambiar(1)">❯</button>
+  </div>
+
+  <div class="controles">
+    <button class="nav" onclick="cambiar(-1)">❮</button>
+    <span class="contador"><span id="actual">1</span> / <span id="total">18</span></span>
+    <button class="nav" onclick="cambiar(1)">❯</button>
   </div>
 </section>
 
@@ -215,6 +231,10 @@
 
   let indice = 0;
   const slide = document.getElementById("slide");
+  const actual = document.getElementById("actual");
+  const total = document.getElementById("total");
+
+  total.textContent = fotos.length;
 
   function cambiar(direccion) {
     indice += direccion;
@@ -224,6 +244,7 @@
     slide.style.opacity = 0;
     setTimeout(() => {
       slide.src = fotos[indice];
+      actual.textContent = indice + 1;
       slide.style.opacity = 1;
     }, 300);
   }
